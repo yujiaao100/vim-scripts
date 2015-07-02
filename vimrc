@@ -22,7 +22,7 @@ if !filereadable(vundle_readme)
 	"vundle install
 	set nocompatible 
 	filetype off 
-	set rtp+=~/.vim/bundle/Vundle.vim
+	set rtp+=~/.vim/bundle/vundle
 	call vundle#begin()
 		Plugin 'gmarik/Vundle.vim'
 		Plugin 'scrooloose/nerdtree'

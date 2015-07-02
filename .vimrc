@@ -79,6 +79,9 @@ endif
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-map <F7> :NERDTreeMirror<CR>
-map <F7> :NERDTreeToggle<CR>
+"map <F7> :NERDTreeMirror<CR>
+"map <F7> :NERDTreeToggle<CR>
 
+if has("gui_running")
+"do nothing
+endif

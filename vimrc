@@ -18,24 +18,28 @@ if !filereadable(vundle_readme)
   	echo ""
   	silent !mkdir -p ~/.vim/bundle
   	silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/Vundle.vim
-	
-	"vundle install
-	set nocompatible 
-	filetype off 
-	set rtp+=~/.vim/bundle/Vundle.vim
-	call vundle#begin()
-		Plugin 'gmarik/Vundle.vim'
-		Plugin 'scrooloose/nerdtree'
-		call vundle#end() 
-   	 filetype plugin indent on 
-	"vundle map
-		map <F7> :NERDTreeMirror<CR>
-		map <F7> :NERDTreeToggle<CR> 
-	"vundle end
-	"PluginInstall
-		PluginInstall
-  let iCanHazVundle=0
+    let iCanHazVundle=0
 endif
+
+"load Plugin
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
+Plugin 'scrooloose/nerdtree'
+call vundle#end()
+filetype plugin indent on
+
+if iCanHazVundle == 0
+  echo "Installing Bundles, please ignore key map error messages"
+  echo ""
+  :PluginInstall
+endif
+
+"map
+map <F7> :NERDTreeMirror<CR>
+map <F7> :NERDTreeToggle<CR> 
 
 if has("gui_running")
 	"do nothing

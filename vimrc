@@ -17,12 +17,12 @@ if !filereadable(vundle_readme)
   	echo "Installing Vundle..."
   	echo ""
   	silent !mkdir -p ~/.vim/bundle
-  	silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+  	silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/Vundle.vim
 	
 	"vundle install
 	set nocompatible 
 	filetype off 
-	set rtp+=~/.vim/bundle/vundle
+	set rtp+=~/.vim/bundle/Vundle.vim
 	call vundle#begin()
 		Plugin 'gmarik/Vundle.vim'
 		Plugin 'scrooloose/nerdtree'

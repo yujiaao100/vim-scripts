@@ -21,6 +21,9 @@ if !filereadable(vundle_readme)
     let iCanHazVundle=0
 endif
 
+"W for permition 
+command W w !sudo tee % > /dev/null
+
 "load Plugin
 set nocompatible
 filetype off

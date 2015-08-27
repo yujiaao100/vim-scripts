@@ -1,6 +1,7 @@
 " bacic settings
 set ts=4
 syntax on
+set ruler
 
 "set encodings
 
@@ -10,6 +11,7 @@ set termencoding=utf-8
 set encoding=utf-8
 set autoindent
 set mouse=a
+
 " Bundle settings
 let iCanHazVundle=1
 let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
@@ -31,6 +33,9 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'mattn/emmet-vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'yegappan/grep'
 call vundle#end()
 filetype plugin indent on
 

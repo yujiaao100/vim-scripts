@@ -5,7 +5,7 @@ set ruler
 
 "set encodings
 
-:set fileencoding=utf-8
+set fileencoding=utf-8
 set fileencodings=utf-8,chinese,latin-1
 set termencoding=utf-8
 set encoding=utf-8

@@ -12,6 +12,9 @@ set encoding=utf-8
 set autoindent
 set mouse=a
 
+"设置ruler 和showmode 可以显示右下角显示行号和 当前模式（插入 选择 行底等） 默认开启
+"set ruler
+"set showmode
 " Bundle settings
 let iCanHazVundle=1
 let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')

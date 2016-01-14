@@ -39,10 +39,11 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'mattn/emmet-vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'yegappan/grep'
-#markdown 插件
-#Plugin 'godlygeek/tabular'
-#Plugin 'plasticboy/vim-markdown'
-#Plugin 'suan/vim-instant-markdown'
+"markdown 插件
+"Plugin 'godlygeek/tabular'
+"Plugin 'plasticboy/vim-markdown'
+"Plugin 'suan/vim-instant-markdown'
+"Plugin 'KabbAmine/vCoolor.vim'
 call vundle#end()
 filetype plugin indent on
 

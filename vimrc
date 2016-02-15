@@ -44,6 +44,7 @@ Plugin 'yegappan/grep'
 "Plugin 'plasticboy/vim-markdown'
 "Plugin 'suan/vim-instant-markdown'
 "Plugin 'KabbAmine/vCoolor.vim'
+"Plugin 'editorconfig/editorconfig-vim'
 call vundle#end()
 filetype plugin indent on
 

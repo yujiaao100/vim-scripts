@@ -61,3 +61,6 @@ map <F7> :NERDTreeToggle<CR>
 if has("gui_running")
 	"do nothing
 endif
+
+"关闭markdown文件折叠
+let g:vim_markdown_folding_disabled = 1

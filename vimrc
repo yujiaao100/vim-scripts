@@ -45,6 +45,8 @@ Plugin 'yegappan/grep'
 "Plugin 'suan/vim-instant-markdown'
 "Plugin 'KabbAmine/vCoolor.vim'
 "Plugin 'editorconfig/editorconfig-vim'
+"sublime配色
+Plugin 'sickill/vim-monokai'
 call vundle#end()
 filetype plugin indent on
 
@@ -53,6 +55,7 @@ if iCanHazVundle == 0
   echo ""
   PluginInstall
 endif
+
 
 "map
 map <F7> :NERDTreeMirror<CR>
@@ -64,3 +67,5 @@ endif
 
 "关闭markdown文件折叠
 let g:vim_markdown_folding_disabled = 1
+"使用monokai的sublime配色
+"colorscheme monokai

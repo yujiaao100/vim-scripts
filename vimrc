@@ -79,6 +79,7 @@ let g:vim_markdown_folding_disabled = 1
 colorscheme monokai  
 
 "let g:user_emmet_leader_key='<C-Z>'
+let g:user_emmet_expandabbr_key = '<C-e>'  
 "gn go to next file  
 "gb go back to the old file
 noremap gn :next<Enter>

@@ -21,6 +21,8 @@ set cursorcolumn
 set hlsearch
 "set guifont=YaHei\ Consolas\ Hybrid\ 11.5
 
+"设置mapleader 键
+let mapleader = "\\"
 " Bundle settings
 let iCanHazVundle=1
 let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
@@ -56,6 +58,7 @@ Plugin 'sickill/vim-monokai'
 Plugin 'taglist.vim'
 Plugin 'winmanager'
 Plugin 'simplyzhao/cscope_maps.vim'
+Plugin 'scrooloose/nerdcommenter'
 call vundle#end()
 filetype plugin indent on
 
@@ -69,11 +72,11 @@ endif
 
 if has("gui_running")
 	"do nothing
-	map <C-V> "+y
 endif
 
 "关闭markdown文件折叠
 let g:multi_cursor_use_default_mapping=0
+"插件配置默认关闭vim-markdown的自动折叠（太恶心了）
 let g:vim_markdown_folding_disabled = 1
 "使用monokai的sublime配色
 colorscheme monokai  
@@ -112,3 +115,17 @@ endfunction
 "TlistToggle
 endfunction
 noremap <F7> :call OpenIDEmode() <CR>
+
+"leader n m 单行注释和多行注释
+map <leader>n <leader>cm
+map <leader>m <leader>c<space>
+"leader co color open
+let g:vcoolor_map = "<leader>co"
+"粘贴模式
+set pastetoggle=<F6>
+"for mac
+if has("mac")
+	map <Command-c> :w !pbcopy<CR><CR>
+	map <Command-v> :w !pbpaste<CR><CR>
+	set backspace=indent,eol,start
+endif

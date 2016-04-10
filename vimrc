@@ -126,6 +126,6 @@ set pastetoggle=<F6>
 "for mac
 if has("mac")
 	map <Command-c> :w !pbcopy<CR><CR>
-	map <Command-v> :w !pbpaste<CR><CR>
+	map <Command-v> :r !pbpaste<CR><CR>
 	set backspace=indent,eol,start
 endif

@@ -10,7 +10,6 @@ set fileencodings=utf-8,chinese,latin-1
 set termencoding=utf-8
 set encoding=utf-8
 set autoindent
-set mouse=a
 
 "设置ruler 和showmode 可以显示右下角显示行号和 当前模式（插入 选择 行底等） 默认开启
 "set ruler
@@ -51,14 +50,16 @@ Plugin 'yegappan/grep'
 Plugin 'KabbAmine/vCoolor.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'plasticboy/vim-markdown'
-"Plugin 'suan/vim-instant-markdown'
-"Plugin 'KabbAmine/vCoolor.vim'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'suan/vim-instant-markdown'
 "sublime配色
 Plugin 'sickill/vim-monokai'
 Plugin 'taglist.vim'
 Plugin 'winmanager'
 Plugin 'simplyzhao/cscope_maps.vim'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'majutsushi/tagbar'
+Plugin 'DoxygenToolkit.vim'
 call vundle#end()
 filetype plugin indent on
 
@@ -72,9 +73,12 @@ endif
 
 if has("gui_running")
 	"do nothing
+	set mouse=a
+	"vcoolor runs when gui
+	let g:vcoolor_map = "<leader>co"
 endif
 
-"关闭markdown文件折叠
+"turn off erryma/vim-multiple-cursors
 let g:multi_cursor_use_default_mapping=0
 "插件配置默认关闭vim-markdown的自动折叠（太恶心了）
 let g:vim_markdown_folding_disabled = 1
@@ -85,42 +89,40 @@ colorscheme monokai
 let g:user_emmet_expandabbr_key = '<C-e>'  
 "gn go to next file  
 "gb go back to the old file
-noremap gn :next<Enter>
-noremap gb :pre<Enter>
+noremap gn :next!<Enter>
+noremap gb :prev!<Enter>
 "
 
 ""ide  模式 打开使用winmannger管理nerdtree 和 taglist
 let Tlist_Show_One_File=1  
 let Tlist_Exit_OnlyWindow=1
-let  g:winManagerWindowLayout = "FileExplorer|TagList,BufExplorer"
+"let  g:winManagerWindowLayout = "FileExplorer|TagList,BufExplorer"
 "let g:winManagerWindowLayout = "NERDTree|TagList,BufExplorer"
 let g:ide_mode_is_open=0
 function OpenIDEmode()
 		if 	g:ide_mode_is_open==0
 				let g:ide_mode_is_open=1
-				execute "WMToggle"
+				"execute "WMToggle"
+				execute "NERDTreeToggle"
+				execute "TagbarToggle"
 				echo "1"
 		else
 				let g:ide_mode_is_open=0
-				execute "WMToggle"
+				execute "NERDTreeToggle"
+				execute "TagbarToggle"
 				echo "0"
 endif
 "两个nerd的辅助函数
-function! NERDTree_Start()
-    exec 'NERDTree'
-endfunction
-function! NERDTree_IsValid()
-    return 1
-endfunction
 "TlistToggle
 endfunction
+
+
 noremap <F7> :call OpenIDEmode() <CR>
 
 "leader n m 单行注释和多行注释
 map <leader>n <leader>cm
 map <leader>m <leader>c<space>
 "leader co color open
-let g:vcoolor_map = "<leader>co"
 "粘贴模式
 set pastetoggle=<F6>
 "for mac
@@ -129,3 +131,12 @@ if has("mac")
 	map <Command-v> :r !pbpaste<CR><CR>
 	set backspace=indent,eol,start
 endif
+
+
+let g:DoxygenToolkit_briefTag_pre="@synopsis  "
+let g:DoxygenToolkit_paramTag_pre="@param "
+let g:DoxygenToolkit_returnTag="@returns   "
+let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
+let g:DoxygenToolkit_blockFooter="----------------------------------------------------------------------------"
+let g:DoxygenToolkit_authorName="Mathias Lorente"
+let g:DoxygenToolkit_licenseTag="My own license"

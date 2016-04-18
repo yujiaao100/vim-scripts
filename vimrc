@@ -60,6 +60,10 @@ Plugin 'simplyzhao/cscope_maps.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'majutsushi/tagbar'
 Plugin 'DoxygenToolkit.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/syntastic'
 call vundle#end()
 filetype plugin indent on
 
@@ -89,8 +93,9 @@ colorscheme monokai
 let g:user_emmet_expandabbr_key = '<C-e>'  
 "gn go to next file  
 "gb go back to the old file
-noremap gn :next!<Enter>
-noremap gb :prev!<Enter>
+"ememeber gBlink in dota
+noremap gb :next!<Enter>
+noremap gB :prev!<Enter>
 "
 
 ""ide  模式 打开使用winmannger管理nerdtree 和 taglist
@@ -120,8 +125,8 @@ endfunction
 noremap <F7> :call OpenIDEmode() <CR>
 
 "leader n m 单行注释和多行注释
-map <leader>n <leader>cm
-map <leader>m <leader>c<space>
+map gz  <leader>cm
+map gx  <leader>c<space>
 "leader co color open
 "粘贴模式
 set pastetoggle=<F6>
@@ -130,6 +135,7 @@ if has("mac")
 	map <Command-c> :w !pbcopy<CR><CR>
 	map <Command-v> :r !pbpaste<CR><CR>
 	set backspace=indent,eol,start
+	let g:airline#extensions#tabline#enabled = 1
 endif
 
 
@@ -140,3 +146,14 @@ let g:DoxygenToolkit_blockHeader="----------------------------------------------
 let g:DoxygenToolkit_blockFooter="----------------------------------------------------------------------------"
 let g:DoxygenToolkit_authorName="Mathias Lorente"
 let g:DoxygenToolkit_licenseTag="My own license"
+
+
+
+"scrooloose/syntastic" settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0

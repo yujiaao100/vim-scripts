@@ -94,7 +94,8 @@ let g:user_emmet_expandabbr_key = '<C-e>'
 "gn go to next file  
 "gb go back to the old file
 "ememeber gBlink in dota
-"
+nnoremap gn :next!<CR>
+nnoremap gb :prev!<CR>
 
 ""ide  模式 打开使用winmannger管理nerdtree 和 taglist
 let Tlist_Show_One_File=1  
@@ -147,6 +148,9 @@ let g:DoxygenToolkit_licenseTag="My own license"
 
 
 let g:airline#extensions#tabline#enabled = 1
+set laststatus=2
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 "scrooloose/syntastic" settings
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}

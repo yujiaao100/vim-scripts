@@ -133,7 +133,6 @@ if has("mac")
 	map <Command-c> :w !pbcopy<CR><CR>
 	map <Command-v> :r !pbpaste<CR><CR>
 	set backspace=indent,eol,start
-	let g:airline#extensions#tabline#enabled = 1
 endif
 
 
@@ -147,6 +146,7 @@ let g:DoxygenToolkit_licenseTag="My own license"
 
 
 
+let g:airline#extensions#tabline#enabled = 1
 "scrooloose/syntastic" settings
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -155,3 +155,4 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_sql_checker=[]

@@ -94,8 +94,6 @@ let g:user_emmet_expandabbr_key = '<C-e>'
 "gn go to next file  
 "gb go back to the old file
 "ememeber gBlink in dota
-noremap gb :next!<Enter>
-noremap gB :prev!<Enter>
 "
 
 ""ide  模式 打开使用winmannger管理nerdtree 和 taglist

@@ -55,8 +55,8 @@ Plugin 'suan/vim-instant-markdown'
 "sublime配色
 Plugin 'sickill/vim-monokai'
 Plugin 'taglist.vim'
-Plugin 'winmanager'
-Plugin 'simplyzhao/cscope_maps.vim'
+"Plugin 'winmanager'
+"Plugin 'simplyzhao/cscope_maps.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'majutsushi/tagbar'
 Plugin 'DoxygenToolkit.vim'
@@ -64,6 +64,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/syntastic'
+Plugin 'project.tar.gz'
 call vundle#end()
 filetype plugin indent on
 
@@ -82,8 +83,6 @@ if has("gui_running")
 	let g:vcoolor_map = "<leader>co"
 endif
 
-"turn off erryma/vim-multiple-cursors
-let g:multi_cursor_use_default_mapping=0
 "插件配置默认关闭vim-markdown的自动折叠（太恶心了）
 let g:vim_markdown_folding_disabled = 1
 "使用monokai的sublime配色
@@ -93,9 +92,11 @@ colorscheme monokai
 let g:user_emmet_expandabbr_key = '<C-e>'  
 "gn go to next file  
 "gb go back to the old file
-"ememeber gBlink in dota
 nnoremap gn :next!<CR>
 nnoremap gb :prev!<CR>
+
+"ememeber gBlink in dota
+"
 
 ""ide  模式 打开使用winmannger管理nerdtree 和 taglist
 let Tlist_Show_One_File=1  
@@ -160,3 +161,10 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_sql_checkers=[]
+
+"change ctrl-p to alt-p
+if has("mac")
+	let g:ctrlp_map='π'
+else
+	let g:ctrlp_map = '<M-p>'
+endif

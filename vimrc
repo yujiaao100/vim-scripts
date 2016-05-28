@@ -65,6 +65,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'project.tar.gz'
+Plugin 'Lokaltog/vim-easymotion'
 call vundle#end()
 filetype plugin indent on
 
@@ -120,9 +121,15 @@ endif
 "两个nerd的辅助函数
 "TlistToggle
 endfunction
-
+""fix a bug when close vim  close ide mode first if it is open.
+function ExitIDEmode()
+		if g:ide_mode_is_open==1
+				call OpenIDEmode()
+		endif
+endfunction
 
 noremap <F7> :call OpenIDEmode() <CR>
+autocmd VimLeave  * :call ExitIDEmode()
 
 "leader n m 单行注释和多行注释
 map gz  <leader>cm
@@ -168,3 +175,6 @@ if has("mac")
 else
 	let g:ctrlp_map = '<M-p>'
 endif
+
+nmap  <Space><Space>w  <leader><leader>w
+set guifont=Source\Code\Pro:h12

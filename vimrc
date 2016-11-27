@@ -35,6 +35,10 @@ endif
 
 "W means sudo w for permition
 command W w !sudo tee % > /dev/null
+ 
+"for long lines 
+nnoremap j gj
+nnoremap k gk
 
 "load Plugin
 set nocompatible
@@ -66,6 +70,12 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'project.tar.gz'
 Plugin 'Lokaltog/vim-easymotion'
+Plugin 'a.vim'
+Plugin 'luochen1990/rainbow'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'yujiaao100/vim-smartcopy'
+Plugin 'severin-lemaignan/vim-minimap'
 call vundle#end()
 filetype plugin indent on
 
@@ -75,26 +85,37 @@ if iCanHazVundle == 0
   PluginInstall
 endif
 
-"map
+"map 
 
 if has("gui_running")
 	"do nothing
 	set mouse=a
 	"vcoolor runs when gui
 	let g:vcoolor_map = "<leader>co"
+	"define menu
+	try
+			menu Useful.OpenIDEMode  :call  OpenIDEmode() <CR>
+			menu Useful.FormateCode  :call FormatCode() <CR>
+			menu Useful.OpenCloolorChooser :VCoolor    <CR>
+	catch
+	endtry
 endif
 
 "插件配置默认关闭vim-markdown的自动折叠（太恶心了）
 let g:vim_markdown_folding_disabled = 1
 "使用monokai的sublime配色
-colorscheme monokai  
+try
+	colorscheme monokai  
+catch
+endtry
 
 "let g:user_emmet_leader_key='<C-Z>'
 let g:user_emmet_expandabbr_key = '<C-e>'  
 "gn go to next file  
 "gb go back to the old file
-nnoremap gn :next!<CR>
-nnoremap gb :prev!<CR>
+nnoremap gn :bNext!<CR>
+nnoremap gb :bprev!<CR>
+
 
 "ememeber gBlink in dota
 "
@@ -137,13 +158,6 @@ map gx  <leader>c<space>
 "leader co color open
 "粘贴模式
 set pastetoggle=<F6>
-"for mac
-if has("mac")
-	map <Command-c> :w !pbcopy<CR><CR>
-	map <Command-v> :r !pbpaste<CR><CR>
-	set backspace=indent,eol,start
-endif
-
 
 let g:DoxygenToolkit_briefTag_pre="@synopsis  "
 let g:DoxygenToolkit_paramTag_pre="@param "
@@ -169,12 +183,34 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_sql_checkers=[]
 
-"change ctrl-p to alt-p
+"change ctrl-p to alt-p change ctrl-p plugin to alt-p
 if has("mac")
+"only for mac
+	map <Command-c> :w !pbcopy<CR><CR>
+	map <Command-v> :r !pbpaste<CR><CR>
+	set backspace=indent,eol,start
+"diffent between mac and windows
 	let g:ctrlp_map='π'
+	inoremap ˙ <Left>
+	inoremap ∆ <Down>
+	inoremap ˚ <Up>
+	inoremap ¬ <Right>
 else
 	let g:ctrlp_map = '<M-p>'
 endif
 
 nmap  <Space><Space>w  <leader><leader>w
-set guifont=Source\Code\Pro:h12
+
+try
+	set guifont=Source\Code\Pro:h12
+catch
+endtry
+
+let g:rainbow_active = 1
+
+function FormatCode()
+		execute  "normal ggVG="
+endfunction 
+"map <F5> :call FormatCode() <CR>
+
+nnoremap gm m

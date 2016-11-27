@@ -99,6 +99,10 @@ if has("gui_running")
 			menu Useful.OpenCloolorChooser :VCoolor    <CR>
 	catch
 	endtry
+	try
+			set guifont=Source\Code\Pro:h12
+	catch
+	endtry
 endif
 
 "插件配置默认关闭vim-markdown的自动折叠（太恶心了）
@@ -201,10 +205,6 @@ endif
 
 nmap  <Space><Space>w  <leader><leader>w
 
-try
-	set guifont=Source\Code\Pro:h12
-catch
-endtry
 
 let g:rainbow_active = 1
 

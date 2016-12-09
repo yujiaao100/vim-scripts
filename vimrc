@@ -67,11 +67,14 @@ Plugin 'DoxygenToolkit.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'kien/ctrlp.vim'
+Plugin 'kshenoy/vim-ctrlp-args'
 Plugin 'scrooloose/syntastic'
 Plugin 'project.tar.gz'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'a.vim'
-Plugin 'luochen1990/rainbow'
+Plugin 'nelstrom/vim-qargs'
+"Plugin 'luochen1990/rainbow'
+"这个rainbow插件在某些时候回导致vim卡住 
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 Plugin 'yujiaao100/vim-smartcopy'
@@ -94,9 +97,10 @@ if has("gui_running")
 	let g:vcoolor_map = "<leader>co"
 	"define menu
 	try
-			menu Useful.OpenIDEMode  :call  OpenIDEmode() <CR>
+			menu Useful.IDEModeToggle  :call  OpenIDEmode() <CR>
 			menu Useful.FormateCode  :call FormatCode() <CR>
 			menu Useful.OpenCloolorChooser :VCoolor    <CR>
+			menu Useful.MinimapToggle :MinimapToggle <CR>
 	catch
 	endtry
 	try
@@ -206,7 +210,7 @@ endif
 nmap  <Space><Space>w  <leader><leader>w
 
 
-let g:rainbow_active = 1
+"let g:rainbow_active = 1
 
 function FormatCode()
 		execute  "normal ggVG="

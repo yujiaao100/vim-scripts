@@ -30,3 +30,5 @@ There are ten types of registers:                       registers E354
 8. The selection and drop registers "*, "+ and "~        
 9. The black hole register "_                            
 10. Last search pattern register "/  
+
+:browse 可以打开一个确认窗口

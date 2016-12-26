@@ -1,4 +1,4 @@
-"" bacic settings
+" bacic settings
 set ts=4
 syntax on
 set ruler

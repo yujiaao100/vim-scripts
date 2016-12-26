@@ -24,13 +24,24 @@ set hlsearch
 let mapleader = "\\"
 " Bundle settings
 let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
-if !filereadable(vundle_readme)
-  	echo "Installing Vundle..."
-  	echo ""
-  	silent !mkdir -p ~/.vim/bundle
-  	silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/Vundle.vim
-    let iCanHazVundle=0
+"let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
+"let vundle_readme=expand('~/.vim/bundle/junegunn/vim-plug/README.md')
+"if !filereadable(vundle_readme)
+"  	echo "Installing Vundle..."
+"  	echo ""
+"  	silent !mkdir -p ~/.vim/bundle
+"  	"silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/Vundle.vim
+"  	silent !git clone https://github.com/junegunn/vim-plug.git  ~/.vim/bundle/vim-plug
+"    let iCanHazVundle=0
+"endif
+
+let auto_plug_file=expand('~/.vim/autoload/plug.vim')
+if !filereadable(auto_plug_file)
+	echo "Install plug"
+	silent !mkdir ~/.vim/autoload
+	silent !mkdir ~/.vim/bundle
+	silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim  2> /dev/null
+	let iCanHazVundle=0
 endif
 
 "W means sudo w for permition
@@ -43,49 +54,50 @@ nnoremap k gk
 "load Plugin
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'mattn/emmet-vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'yegappan/grep'
-Plugin 'KabbAmine/vCoolor.vim'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'suan/vim-instant-markdown'
+"set rtp+=~/.vim/bundle/vim-plug
+call plug#begin("~/.vim/bundle")
+Plug 'gmarik/Vundle.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'mattn/emmet-vim'
+Plug 'mileszs/ack.vim'
+Plug 'yegappan/grep'
+Plug 'KabbAmine/vCoolor.vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'suan/vim-instant-markdown'
 "sublime配色
-Plugin 'sickill/vim-monokai'
-Plugin 'taglist.vim'
-"Plugin 'winmanager'
-"Plugin 'simplyzhao/cscope_maps.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'majutsushi/tagbar'
-Plugin 'DoxygenToolkit.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'kien/ctrlp.vim'
-Plugin 'kshenoy/vim-ctrlp-args'
-Plugin 'scrooloose/syntastic'
-Plugin 'project.tar.gz'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'a.vim'
-Plugin 'nelstrom/vim-qargs'
-"Plugin 'luochen1990/rainbow'
+Plug 'sickill/vim-monokai'
+Plug 'taglist.vim'
+"Plug 'winmanager'
+"Plug 'simplyzhao/cscope_maps.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'majutsushi/tagbar'
+Plug 'DoxygenToolkit.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'kien/ctrlp.vim'
+Plug 'kshenoy/vim-ctrlp-args'
+Plug 'scrooloose/syntastic'
+Plug 'project.tar.gz'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'a.vim'
+Plug 'nelstrom/vim-qargs'
+"Plug 'luochen1990/rainbow'
 "这个rainbow插件在某些时候回导致vim卡住 
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-repeat'
-Plugin 'yujiaao100/vim-smartcopy'
-Plugin 'severin-lemaignan/vim-minimap'
-call vundle#end()
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'yujiaao100/vim-smartcopy'
+Plug 'severin-lemaignan/vim-minimap'
+Plug 'rosenfeld/conque-term'
+call plug#end()
 filetype plugin indent on
 
 if iCanHazVundle == 0
   echo "Installing Bundles, please ignore key map error messages"
   echo ""
-  PluginInstall
+  PlugInstall
 endif
 
 "map 
@@ -101,6 +113,9 @@ if has("gui_running")
 			menu Useful.FormateCode  :call FormatCode() <CR>
 			menu Useful.OpenCloolorChooser :VCoolor    <CR>
 			menu Useful.MinimapToggle :MinimapToggle <CR>
+			menu Useful.Bash.Split          :ConqueTermSplit bash <CR>
+			menu Useful.Bash.Tab          	:ConqueTermTab bash <CR>
+			menu Useful.Bash.VSplit         :ConqueTermVSplit bash <CR>
 	catch
 	endtry
 	try
@@ -207,6 +222,7 @@ else
 	let g:ctrlp_map = '<M-p>'
 endif
 
+"vim-easymotion 快速查找快捷操作
 nmap  <Space><Space>w  <leader><leader>w
 
 
@@ -218,3 +234,5 @@ endfunction
 "map <F5> :call FormatCode() <CR>
 
 nnoremap gm m
+"for ConqueTerm 关闭时关闭buffer 否则关闭shell 会变成普通缓冲区 
+let g:ConqueTerm_CloseOnEnd = 1 

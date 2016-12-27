@@ -24,6 +24,7 @@ set hlsearch
 let mapleader = "\\"
 " Bundle settings
 let iCanHazVundle=1
+let has_mac_fcitx_for_mac=1
 "let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
 "let vundle_readme=expand('~/.vim/bundle/junegunn/vim-plug/README.md')
 "if !filereadable(vundle_readme)
@@ -220,6 +221,30 @@ if has("mac")
 	inoremap ¬ <Right>
 else
 	let g:ctrlp_map = '<M-p>'
+endif
+"https://zhuanlan.zhihu.com/p/23578381
+"解决输入模式下输入中文后切换成normal模式下还是中文导致normal模式下经常出错的问题
+if has_mac_fcitx_for_mac==1 
+function! Fcitx2en()
+		let input_status = system('fcitx-remote')
+		if input_status == 2
+				let b:inputtoggle = 1
+				call system('fcitx-remote -c')
+		endif
+endfunction
+function! Fcitx2zh()
+		try
+				if b:inputtoggle == 1
+						call system('fcitx-remote -o')
+						let b:inputtoggle = 0
+				endif
+		catch /inputtoggle/
+				let b:inputtoggle = 0
+		endtry
+endfunction
+"Autocmds
+au InsertLeave * call Fcitx2en()
+au InsertEnter * call Fcitx2zh()
 endif
 
 "vim-easymotion 快速查找快捷操作

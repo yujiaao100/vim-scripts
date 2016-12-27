@@ -12,3 +12,7 @@
 	5. 可选 vCoolor.vim 必须带图形界面(mvim 或者gvim  否则会失效~~~)
 	6. https://github.com/powerline/fonts 安装airline 额外字体
 	7. 可选 gem install sqlint  安装sql语法检测 但是语法检查居然不是基于mysql的 所以放弃 默认关闭sql语法检测
+	8.brew install fcitx-remote-for-osx  
+	+ fcitx-remote --with-input-method=general
+	+ 使用fcitx框架解决normal模式下的冲突问题
+	+ 然后在系统设置中将『选择「输入法」菜单中的下一个输入法』快捷键改为 Ctrl-Shift-z

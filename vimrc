@@ -224,6 +224,7 @@ else
 endif
 "https://zhuanlan.zhihu.com/p/23578381
 "解决输入模式下输入中文后切换成normal模式下还是中文导致normal模式下经常出错的问题
+"https://github.com/vim-scripts/fcitx.vim/tree/master/plugin
 if has_mac_fcitx_for_mac==1 
 function! Fcitx2en()
 		let input_status = system('fcitx-remote')

@@ -41,7 +41,8 @@ if !filereadable(auto_plug_file)
 	echo "Install plug"
 	silent !mkdir ~/.vim/autoload
 	silent !mkdir ~/.vim/bundle
-	silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim  2> /dev/null
+	"silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim  2> /dev/null
+	silent !curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim  > /dev/null
 	let iCanHazVundle=0
 endif
 
@@ -92,6 +93,17 @@ Plug 'tpope/vim-repeat'
 Plug 'yujiaao100/vim-smartcopy'
 Plug 'severin-lemaignan/vim-minimap'
 Plug 'rosenfeld/conque-term'
+"vim 8.0异步执行特性
+Plug 'skywind3000/asyncrun.vim'
+"文件搜索 Shougo/denite.nvim 还没开发完成 
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'Shougo/vimshell.vim'
+Plug 'Shougo/neocomplete.vim'
+"for lua
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-lua-ftplugin'
+Plug 'lua-support'
 call plug#end()
 filetype plugin indent on
 
@@ -113,6 +125,7 @@ if has("gui_running")
 			menu Useful.IDEModeToggle  :call  OpenIDEmode() <CR>
 			menu Useful.FormateCode  :call FormatCode() <CR>
 			menu Useful.OpenCloolorChooser :VCoolor    <CR>
+			menu Useful.ToggleShell         :call Toggle_shell() <CR>
 			menu Useful.MinimapToggle :MinimapToggle <CR>
 			menu Useful.Bash.Split          :ConqueTermSplit bash <CR>
 			menu Useful.Bash.Tab          	:ConqueTermTab bash <CR>
@@ -251,6 +264,8 @@ endif
 "vim-easymotion 快速查找快捷操作
 nmap  <Space><Space>w  <leader><leader>w
 
+"
+
 
 "let g:rainbow_active = 1
 
@@ -262,3 +277,91 @@ endfunction
 nnoremap gm m
 "for ConqueTerm 关闭时关闭buffer 否则关闭shell 会变成普通缓冲区 
 let g:ConqueTerm_CloseOnEnd = 1 
+"let g:vimshell-options-toggle=1
+function! Toggle_shell()
+		let tmp=&splitbelow
+		set splitbelow
+		execute  "VimShell -toggle -split-command=split"
+		"set splitbelow=tmp
+		if tmp==0
+		set nosplitbelow
+		endif
+endfunction
+
+
+
+if has('lua') 
+		"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+		" Disable AutoComplPop.
+		let g:acp_enableAtStartup = 0
+		" Use neocomplete.
+		let g:neocomplete#enable_at_startup = 1
+		" Use smartcase.
+		let g:neocomplete#enable_smart_case = 1
+		" Set minimum syntax keyword length.
+		let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+		" Define dictionary.
+		let g:neocomplete#sources#dictionary#dictionaries = {
+								\ 'default' : '',
+								\ 'vimshell' : $HOME.'/.vimshell_hist',
+								\ 'scheme' : $HOME.'/.gosh_completions'
+								\ }
+
+		" Define keyword.
+		if !exists('g:neocomplete#keyword_patterns')
+				let g:neocomplete#keyword_patterns = {}
+		endif
+		let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+		" Plugin key-mappings.
+		inoremap <expr><C-g>     neocomplete#undo_completion()
+		inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+		" Recommended key-mappings.
+		" <CR>: close popup and save indent.
+		inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+		function! s:my_cr_function()
+				return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+				" For no inserting <CR> key.
+				"return pumvisible() ? "\<C-y>" : "\<CR>"
+		endfunction
+		" <TAB>: completion.
+		inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+		" <C-h>, <BS>: close popup and delete backword char.
+		inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+		inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+		" Close popup by <Space>.
+		"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+		" AutoComplPop like behavior.
+		"let g:neocomplete#enable_auto_select = 1
+
+		" Shell like behavior(not recommended).
+		"set completeopt+=longest
+		"let g:neocomplete#enable_auto_select = 1
+		"不使用自动提示 使用C-n 进行手动提示 和不含自动补全的vim一致
+		let g:neocomplete#disable_auto_complete = 1
+		inoremap <expr><C-n>  pumvisible() ? "\<C-n>" :neocomplete#start_manual_complete() 		
+		"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+		" Enable omni completion.
+		autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+		autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+		autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+		autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+		autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+		autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
+
+		" Enable heavy omni completion.
+		if !exists('g:neocomplete#sources#omni#input_patterns')
+				let g:neocomplete#sources#omni#input_patterns = {}
+		endif
+		"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+		"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+		"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+		" For perlomni.vim setting.
+		" https://github.com/c9s/perlomni.vim
+		let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+endif

@@ -103,7 +103,6 @@ Plug 'Shougo/neocomplete.vim'
 "for lua
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-lua-ftplugin'
-Plug 'lua-support'
 call plug#end()
 filetype plugin indent on
 

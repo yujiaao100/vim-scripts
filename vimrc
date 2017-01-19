@@ -1,4 +1,4 @@
-" bacic settings
+" bacic 
 set ts=4
 syntax on
 set ruler
@@ -19,6 +19,8 @@ set cursorline
 set cursorcolumn
 set hlsearch
 "set guifont=YaHei\ Consolas\ Hybrid\ 11.5
+"新建splite窗口默认出现在下面 上面很不习惯
+set splitbelow
 
 "设置mapleader 键
 let mapleader = "\\"
@@ -58,7 +60,7 @@ set nocompatible
 filetype off
 "set rtp+=~/.vim/bundle/vim-plug
 call plug#begin("~/.vim/bundle")
-Plug 'gmarik/Vundle.vim'
+"Plug 'gmarik/Vundle.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'mattn/emmet-vim'
@@ -103,6 +105,26 @@ Plug 'Shougo/neocomplete.vim'
 "for lua
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-lua-ftplugin'
+Plug 'DfrankUtil'
+Plug 'vimprj'
+"Dash 插件
+Plug 'rizzatti/dash.vim'
+Plug 'junegunn/vim-emoji'
+Plug 'godlygeek/tabular'
+Plug 'Ignotus/vim-cmake-project'
+Plug 'airblade/vim-gitgutter'
+"Plug 'sigidagi/vim-cmake-project'
+"Plug 'scrooloose/nerdtree'
+"Plug 'benmills/vimux'
+"Plug 'MattesGroeger/vim-bookmarks'
+"
+"Plug 'KabbAmine/zeavim.vim', {'on': [
+            "\   'Zeavim', 'Docset',
+            "\   '<Plug>Zeavim',
+            "\   '<Plug>ZVVisSelection',
+            "\   '<Plug>ZVKeyDocset',
+            "\   '<Plug>ZVMotion'
+            "\ ]}
 call plug#end()
 filetype plugin indent on
 
@@ -132,7 +154,7 @@ if has("gui_running")
 	catch
 	endtry
 	try
-			set guifont=Source\Code\Pro:h12
+			set guifont=Source\Code\Pro:h20
 	catch
 	endtry
 endif
@@ -231,6 +253,9 @@ if has("mac")
 	inoremap ∆ <Down>
 	inoremap ˚ <Up>
 	inoremap ¬ <Right>
+	"mac下使用DashSearch找文档
+	"windows 下需要配置 KabbAmine/zeavim.vim 使用zeal
+	nmap <C-k> <Plug>DashSearch
 else
 	let g:ctrlp_map = '<M-p>'
 endif
@@ -273,6 +298,7 @@ function FormatCode()
 endfunction 
 "map <F5> :call FormatCode() <CR>
 
+"gm{a-z}  标记为书签{a-z}  而m 为书签插件的书签 gma 记录书签标记为a  ma 是列出书签
 nnoremap gm m
 "for ConqueTerm 关闭时关闭buffer 否则关闭shell 会变成普通缓冲区 
 let g:ConqueTerm_CloseOnEnd = 1 
@@ -280,13 +306,27 @@ let g:ConqueTerm_CloseOnEnd = 1
 function! Toggle_shell()
 		let tmp=&splitbelow
 		set splitbelow
-		execute  "VimShell -toggle -split-command=split"
+		execute  "VimShell -toggle -split-command=split -buffer-name=VimShell___buffer"
+		"let bufferid=bufnr("[vimshell] - VimShell___buffer")
+		"if !vimshell#get_status_string()
+			"echo "ok"
+			"echo bufloaded(bufferid)
+			"echo "111"
+			"if bufloaded(bufferid)==0 
+				"execute "bdelete! ".bufferid
+				""echo "bdelete! ".bufferid
+				"echo "111"
+			"endif
+		"endif
 		"set splitbelow=tmp
 		if tmp==0
 		set nosplitbelow
 		endif
 endfunction
-
+noremap <F8> :call Toggle_shell() <CR>
+"let g:lua_complete_omni = 1
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
 
 if has('lua') 
@@ -350,7 +390,7 @@ if has('lua')
 		autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 		autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 		autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-		autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
+		"autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
 
 		" Enable heavy omni completion.
 		if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -364,3 +404,13 @@ if has('lua')
 		" https://github.com/c9s/perlomni.vim
 		let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 endif
+"let g:loaded_unite_source_bookmark=1
+"for CMakeProject
+"nnoremap <Enter> call CMake_change_file() <CR>
+"function! CMake_change_file()
+"echo bufname("%")
+"if bufname("%")=="@CMakeProject"
+		"call Cmake_on_space_clicked() 
+"endif
+"execute "<CR>"
+"endfunction

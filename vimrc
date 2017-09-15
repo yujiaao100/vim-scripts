@@ -1,7 +1,6 @@
 " bacic 
 set ts=4
 syntax on
-set ruler
 
 "set encodings
 
@@ -12,8 +11,10 @@ set encoding=utf-8
 set autoindent
 
 "设置ruler 和showmode 可以显示右下角显示行号和 当前模式（插入 选择 行底等） 默认开启
-"set ruler
-"set showmode
+set ruler
+set showmode
+"设置宽提示命令模式下的补全更好用
+set wildmenu
 "高亮显示当前行 列搜索结果
 set cursorline
 set cursorcolumn
@@ -54,6 +55,15 @@ command W w !sudo tee % > /dev/null
 "for long lines 
 nnoremap j gj
 nnoremap k gk
+"for paste
+"gc 可以切换用p粘贴的空寄存器 和用<C-v>粘贴的*寄存器 的reg为列模式然后可以直接进行列粘贴
+nnoremap gc :call Set_mode_v_paste()<CR>
+function Set_mode_v_paste()
+	let a:tmp=getregtype('*')
+	call setreg(@*,@*,'b')
+	normal! "*p 
+	call setreg(@*,@*,a:tmp)
+endfunction
 
 "load Plugin
 set nocompatible
@@ -83,7 +93,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'kien/ctrlp.vim'
 Plug 'kshenoy/vim-ctrlp-args'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
+"ale 支持vim8.0 的异步 比 syntastic 快很多
+Plug 'w0rp/ale'
 Plug 'project.tar.gz'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'a.vim'
@@ -111,13 +123,22 @@ Plug 'vimprj'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'godlygeek/tabular'
-Plug 'Ignotus/vim-cmake-project'
-Plug 'airblade/vim-gitgutter'
+"Plug 'Ignotus/vim-cmake-project'
+"Plug 'airblade/vim-gitgutter'
+Plug 'yujiaao100/vim-cmake-project'
+Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-fugitive'
+Plug 'ryanoasis/nerd-fonts'
+Plug 'leafgarland/typescript-vim'
+"Plug 'zoeesilcock/vim-caniuse'
+"I can use 一个css兼容性测试扩展
+"Plug 'Quramy/tsuquyomi'
 "Plug 'sigidagi/vim-cmake-project'
 "Plug 'scrooloose/nerdtree'
 "Plug 'benmills/vimux'
 "Plug 'MattesGroeger/vim-bookmarks'
-"
+"Plug 'hjdivad/vimlocalhistory'
+
 "Plug 'KabbAmine/zeavim.vim', {'on': [
             "\   'Zeavim', 'Docset',
             "\   '<Plug>Zeavim',
@@ -140,6 +161,15 @@ if has("gui_running")
 	"do nothing
 	set mouse=a
 	"vcoolor runs when gui
+	if has("mac")
+	"mac 保存桌面 ：WW
+		command WW browse confirm w ~/Desktop 
+		"open -a MacVim.app 11.txt
+		"open -a Google\ Chrome 
+		nnoremap <F6> :!open -a Google\ Chrome %<CR><CR>
+	else
+		command WW browse confirm w  
+	endif
 	let g:vcoolor_map = "<leader>co"
 	"define menu
 	try
@@ -154,7 +184,9 @@ if has("gui_running")
 	catch
 	endtry
 	try
-			set guifont=Source\Code\Pro:h20
+			set guifont=Source\ Code\ Pro:h21
+			"set guifont=Source\ Code\ Pro \h21 for windows
+			"windows和mac字体格式不一样没测试过
 	catch
 	endtry
 endif
@@ -215,7 +247,7 @@ map gz  <leader>cm
 map gx  <leader>c<space>
 "leader co color open
 "粘贴模式
-set pastetoggle=<F6>
+set pastetoggle=<F5>
 
 let g:DoxygenToolkit_briefTag_pre="@synopsis  "
 let g:DoxygenToolkit_paramTag_pre="@param "
@@ -324,9 +356,8 @@ function! Toggle_shell()
 		endif
 endfunction
 noremap <F8> :call Toggle_shell() <CR>
-"let g:lua_complete_omni = 1
-let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+let g:lua_complete_omni = 1
+let g:lua_complete_dynamic=0
 
 
 if has('lua') 
@@ -381,8 +412,22 @@ if has('lua')
 		"let g:neocomplete#enable_auto_select = 1
 		"不使用自动提示 使用C-n 进行手动提示 和不含自动补全的vim一致
 		let g:neocomplete#disable_auto_complete = 1
-		inoremap <expr><C-n>  pumvisible() ? "\<C-n>" :neocomplete#start_manual_complete() 		
+		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>" :neocomplete#start_manual_complete() 		
+		function Neocomplete_complete()
+				" &omnifunc
+				if (&completefunc !='')
+				"if (&omnifunc)
+						return "\<C-x>\<C-u>"
+				else
+						return "\<C-x>\<C-n>"
+				endif
+		endfunction
+		"completefunc
+		"自动补全
+		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>": Neocomplete_complete()	
+		"inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
 		"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+		inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
 
 		" Enable omni completion.
 		autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -390,7 +435,7 @@ if has('lua')
 		autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 		autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 		autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-		"autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
+		autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
 
 		" Enable heavy omni completion.
 		if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -404,13 +449,24 @@ if has('lua')
 		" https://github.com/c9s/perlomni.vim
 		let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 endif
-"let g:loaded_unite_source_bookmark=1
-"for CMakeProject
-"nnoremap <Enter> call CMake_change_file() <CR>
-"function! CMake_change_file()
-"echo bufname("%")
-"if bufname("%")=="@CMakeProject"
-		"call Cmake_on_space_clicked() 
-"endif
-"execute "<CR>"
+"end neocomplete
+
+"cmake ide begin
+"let g:cmake_ide_open=0
+"function  CMakeIDEToggle()
+		"if g:cmake_ide_open==0
+			"let s:dir=getcwd().'/vimcmake'
+			"if !isdirectory(s:dir)
+				"call mkdir(s:dir)
+				"CMakeGen vimcmake
+			"else
+			"end
+			"CMakeBar
+			"let g:cmake_ide_open=1
+		"else
+			""is_open close
+			"CMakeBar	
+			"let g:cmake_ide_open=0
+		"end
 "endfunction
+""cmake ide end

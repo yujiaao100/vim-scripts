@@ -113,8 +113,8 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Shougo/vimshell.vim'
-Plug 'Shougo/neocomplete.vim'
-"Plug 'maralla/completor.vim'
+"Plug 'Shougo/neocomplete.vim'
+Plug 'maralla/completor.vim'
 "for lua
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-lua-ftplugin'
@@ -130,11 +130,12 @@ Plug 'godlygeek/tabular'
 Plug 'yujiaao100/vim-cmake-project'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
-Plug 'ryanoasis/nerd-fonts'
+"nerd 字体库  太大了 就不安装了
+"Plug 'ryanoasis/nerd-fonts'
 Plug 'leafgarland/typescript-vim'
 Plug 'othree/csscomplete.vim'
 Plug 'python-mode/python-mode'
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
 "Plug 'zoeesilcock/vim-caniuse'
 "I can use 一个css兼容性测试扩展
 "Plug 'Quramy/tsuquyomi'
@@ -385,106 +386,130 @@ let g:lua_complete_omni = 1
 let g:lua_complete_dynamic=0
 let g:lua_compiler_name = '/usr/local/bin/luac'
 
+"let g:completor_auto_trigger=0
+"let g:completor_set_options=0
 
-if has('lua') 
-		"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-		" Disable AutoComplPop.
-		let g:acp_enableAtStartup = 0
-		" Use neocomplete.
-		let g:neocomplete#enable_at_startup = 1
-		" Use smartcase.
-		let g:neocomplete#enable_smart_case = 1
-		" Set minimum syntax keyword length.
-		let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-		" Define dictionary.
-		let g:neocomplete#sources#dictionary#dictionaries = {
-								\ 'default' : '',
-								\ 'vimshell' : $HOME.'/.vimshell_hist',
-								\ 'scheme' : $HOME.'/.gosh_completions'
-								\ }
-
-		" Define keyword.
-		if !exists('g:neocomplete#keyword_patterns')
-				let g:neocomplete#keyword_patterns = {}
-		endif
-		let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-		" Plugin key-mappings.
-		inoremap <expr><C-g>     neocomplete#undo_completion()
-		inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-		" Recommended key-mappings.
-		" <CR>: close popup and save indent.
-		inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-		function! s:my_cr_function()
-				return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-				" For no inserting <CR> key.
-				"return pumvisible() ? "\<C-y>" : "\<CR>"
-		endfunction
-		" <TAB>: completion.
-		inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-		" <C-h>, <BS>: close popup and delete backword char.
-		inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-		inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-		" Close popup by <Space>.
-		"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-		" AutoComplPop like behavior.
-		"let g:neocomplete#enable_auto_select = 1
-
-		" Shell like behavior(not recommended).
-		"set completeopt+=longest
-		"let g:neocomplete#enable_auto_select = 1
-		"不使用自动提示 使用C-n 进行手动提示 和不含自动补全的vim一致
-		let g:neocomplete#disable_auto_complete = 1 
-		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>" :neocomplete#start_manual_complete() 		
-		"yujiaao  
-		"<C-x><C-u> 可以显示更多信息 但是不一定每个插件都支持
-		"需要区别对待各种语言 
-		"<C-x><C-u> completefunc 补全
-		"<C-x><C-o> omni 补全
-		function Neocomplete_complete()
+function Yujiaao_complete()
+				"补全函数的特殊处理
 				" &omnifunc
 				"if (&completefunc !='')
-				if (&omnifunc !='')
-						if (&filetype=="python")
-							return "\<C-x>\<C-o>"
-						else
-							return "\<C-x>\<C-u>"
-						endif
-				else
-						return "\<C-x>\<C-n>"
-				endif
-		endfunction
-		"completefunc
-		"自动补全
-		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>": Neocomplete_complete()	
-		"inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
-		"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-		inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
+				"if (&omnifunc !='')
+				"			if (&filetype=="python")
+				"			return "\<C-x>\<C-o>"
+				"		else
+				"			return "\<C-x>\<C-u>"
+				"		endif
+				"else
+				"		return "\<C-x>\<C-n>"
+				"endif"\<C-x>\<C-u>\<C-p>"
+				""\<C-x>\<C-u>\<C-p>"
+				"if (&filetype=="lua")
+				"		return  "\<C-x>\<C-o>"
+				"default
+				return "\<C-x>\<C-u>\<C-p>"
+endfunction
+let g:completor_auto_trigger = 0
+inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : Yujiaao_complete()
 
-		" Enable omni completion.
-		autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-		autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-		autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-		"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-		autocmd FileType python setlocal omnifunc=jedi#completions
-		autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-		autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
-
-		" Enable heavy omni completion.
-		if !exists('g:neocomplete#sources#omni#input_patterns')
-				let g:neocomplete#sources#omni#input_patterns = {}
-		endif
-		"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-		"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-		"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-		" For perlomni.vim setting.
-		" https://github.com/c9s/perlomni.vim
-		let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-endif
+"if has('lua') 
+"		"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+"		" Disable AutoComplPop.
+"		let g:acp_enableAtStartup = 0
+"		" Use neocomplete.
+"		let g:neocomplete#enable_at_startup = 1
+"		" Use smartcase.
+"		let g:neocomplete#enable_smart_case = 1
+"		" Set minimum syntax keyword length.
+"		let g:neocomplete#sources#syntax#min_keyword_length = 3
+"
+"		" Define dictionary.
+"		let g:neocomplete#sources#dictionary#dictionaries = {
+"								\ 'default' : '',
+"								\ 'vimshell' : $HOME.'/.vimshell_hist',
+"								\ 'scheme' : $HOME.'/.gosh_completions'
+"								\ }
+"
+"		" Define keyword.
+"		if !exists('g:neocomplete#keyword_patterns')
+"				let g:neocomplete#keyword_patterns = {}
+"		endif
+"		let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+"
+"		" Plugin key-mappings.
+"		inoremap <expr><C-g>     neocomplete#undo_completion()
+"		inoremap <expr><C-l>     neocomplete#complete_common_string()
+"
+"		" Recommended key-mappings.
+"		" <CR>: close popup and save indent.
+"		inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+"		function! s:my_cr_function()
+"				return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+"				" For no inserting <CR> key.
+"				"return pumvisible() ? "\<C-y>" : "\<CR>"
+"		endfunction
+"		" <TAB>: completion.
+"		inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"		" <C-h>, <BS>: close popup and delete backword char.
+"		inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+"		inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+"		" Close popup by <Space>.
+"		"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+"
+"		" AutoComplPop like behavior.
+"		"let g:neocomplete#enable_auto_select = 1
+"
+"		" Shell like behavior(not recommended).
+"		"set completeopt+=longest
+"		"let g:neocomplete#enable_auto_select = 1
+"		"不使用自动提示 使用C-n 进行手动提示 和不含自动补全的vim一致
+"		let g:neocomplete#disable_auto_complete = 1 
+"		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>" :neocomplete#start_manual_complete() 		
+"		"yujiaao  
+"		"<C-x><C-u> 可以显示更多信息 但是不一定每个插件都支持
+"		"需要区别对待各种语言 
+"		"<C-x><C-u> completefunc 补全
+"		"<C-x><C-o> omni 补全
+"		function Neocomplete_complete()
+"				" &omnifunc
+"				"if (&completefunc !='')
+"				if (&omnifunc !='')
+"						if (&filetype=="python")
+"							return "\<C-x>\<C-o>"
+"						else
+"							return "\<C-x>\<C-u>"
+"						endif
+"				else
+"						return "\<C-x>\<C-n>"
+"				endif
+"		endfunction
+"		"completefunc
+"		"自动补全
+"		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>": Neocomplete_complete()	
+"		"inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
+"		"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+"		inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
+"
+"		" Enable omni completion.
+"		autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+"		autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"		autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"		"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+"		autocmd FileType python setlocal omnifunc=jedi#completions
+"		autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+"		autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
+"
+"		" Enable heavy omni completion.
+"		if !exists('g:neocomplete#sources#omni#input_patterns')
+"				let g:neocomplete#sources#omni#input_patterns = {}
+"		endif
+"		"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"		"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"		"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+"
+"		" For perlomni.vim setting.
+"		" https://github.com/c9s/perlomni.vim
+"		let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+"endif
 "end neocomplete
 
 "cmake ide begin

@@ -114,9 +114,11 @@ Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Shougo/vimshell.vim'
 Plug 'Shougo/neocomplete.vim'
+"Plug 'maralla/completor.vim'
 "for lua
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-lua-ftplugin'
+Plug 'luarefvim'
 Plug 'DfrankUtil'
 Plug 'vimprj'
 "Dash 插件
@@ -130,6 +132,9 @@ Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'ryanoasis/nerd-fonts'
 Plug 'leafgarland/typescript-vim'
+Plug 'othree/csscomplete.vim'
+Plug 'python-mode/python-mode'
+Plug 'davidhalter/jedi-vim'
 "Plug 'zoeesilcock/vim-caniuse'
 "I can use 一个css兼容性测试扩展
 "Plug 'Quramy/tsuquyomi'
@@ -198,6 +203,26 @@ try
 	colorscheme monokai  
 catch
 endtry
+
+"python mode conf
+"关闭默认文档和打开文档 选择模式下K 为查找文档
+"关闭默认折叠 关闭自动补全 同一使用<C-n> 手动补全 
+let g:pymode_doc = 0
+let g:pymode_doc_bind = 'K'
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_folding = 0
+let g:pymode_lint = 0
+let g:pymode_rope = 0
+"
+let g:jedi#show_call_signatures = "0"
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = ""
+let g:jedi#rename_command = "<leader>r"
+
 
 "let g:user_emmet_leader_key='<C-Z>'
 let g:user_emmet_expandabbr_key = '<C-e>'  
@@ -358,6 +383,7 @@ endfunction
 noremap <F8> :call Toggle_shell() <CR>
 let g:lua_complete_omni = 1
 let g:lua_complete_dynamic=0
+let g:lua_compiler_name = '/usr/local/bin/luac'
 
 
 if has('lua') 
@@ -411,13 +437,22 @@ if has('lua')
 		"set completeopt+=longest
 		"let g:neocomplete#enable_auto_select = 1
 		"不使用自动提示 使用C-n 进行手动提示 和不含自动补全的vim一致
-		let g:neocomplete#disable_auto_complete = 1
+		let g:neocomplete#disable_auto_complete = 1 
 		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>" :neocomplete#start_manual_complete() 		
+		"yujiaao  
+		"<C-x><C-u> 可以显示更多信息 但是不一定每个插件都支持
+		"需要区别对待各种语言 
+		"<C-x><C-u> completefunc 补全
+		"<C-x><C-o> omni 补全
 		function Neocomplete_complete()
 				" &omnifunc
-				if (&completefunc !='')
-				"if (&omnifunc)
-						return "\<C-x>\<C-u>"
+				"if (&completefunc !='')
+				if (&omnifunc !='')
+						if (&filetype=="python")
+							return "\<C-x>\<C-o>"
+						else
+							return "\<C-x>\<C-u>"
+						endif
 				else
 						return "\<C-x>\<C-n>"
 				endif
@@ -433,7 +468,8 @@ if has('lua')
 		autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 		autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 		autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-		autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+		"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+		autocmd FileType python setlocal omnifunc=jedi#completions
 		autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 		autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
 
@@ -470,3 +506,4 @@ endif
 		"end
 "endfunction
 ""cmake ide end
+

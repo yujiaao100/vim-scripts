@@ -25,6 +25,26 @@ set splitbelow
 
 "设置mapleader 键
 let mapleader = "\\"
+
+"粘贴模式
+set pastetoggle=<F5>
+"gn go to next file  
+"gb go back to the old file
+nnoremap gn :bNext!<CR>
+nnoremap gb :bprev!<CR>
+"gm{a-z}  标记为书签{a-z}  而m 为书签插件的书签 gma 记录书签标记为a  ma 是列出书签
+nnoremap gm m
+function FormatCode()
+		execute  "normal ggVG="
+endfunction 
+"W means sudo w for permition
+command W w !sudo tee % > /dev/null
+ 
+"for long lines 
+nnoremap j gj
+nnoremap k gk
+"no plugin_settings"
+"
 " Bundle settings
 let iCanHazVundle=1
 let has_mac_fcitx_for_mac=1
@@ -49,12 +69,6 @@ if !filereadable(auto_plug_file)
 	let iCanHazVundle=0
 endif
 
-"W means sudo w for permition
-command W w !sudo tee % > /dev/null
- 
-"for long lines 
-nnoremap j gj
-nnoremap k gk
 "for paste
 "gc 可以切换用p粘贴的空寄存器 和用<C-v>粘贴的*寄存器 的reg为列模式然后可以直接进行列粘贴
 nnoremap gc :call Set_mode_v_paste()<CR>
@@ -66,6 +80,8 @@ function Set_mode_v_paste()
 endfunction
 
 "load Plugin
+"Plug 'neomake/neomake'
+"Plug 'tracyone/neomake-multiprocess'
 set nocompatible
 filetype off
 "set rtp+=~/.vim/bundle/vim-plug
@@ -81,6 +97,9 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'suan/vim-instant-markdown'
+"for 异步搜索
+Plug 'neomake/neomake'
+Plug 'tracyone/neomake-multiprocess'
 "sublime配色
 Plug 'sickill/vim-monokai'
 Plug 'taglist.vim'
@@ -111,7 +130,7 @@ Plug 'rosenfeld/conque-term'
 "vim 8.0异步执行特性
 Plug 'skywind3000/asyncrun.vim'
 "文件搜索 Shougo/denite.nvim 还没开发完成 
-"Yggdroot/LeaderF 待测试
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Shougo/vimshell.vim'
@@ -140,8 +159,8 @@ Plug 'leafgarland/typescript-vim'
 Plug 'othree/csscomplete.vim'
 Plug 'python-mode/python-mode'
 "Plug 'davidhalter/jedi-vim'
-Plug 'zoeesilcock/vim-caniuse'
 "I can use 一个css兼容性测试扩展
+Plug 'zoeesilcock/vim-caniuse'
 "for ts
 Plug 'Quramy/tsuquyomi'
 "Plug 'sigidagi/vim-cmake-project'
@@ -167,8 +186,6 @@ if iCanHazVundle == 0
   PlugInstall
 endif
 
-""test
-"map 
 
 if has("gui_running")
 	"do nothing
@@ -234,20 +251,12 @@ let g:jedi#rename_command = "<leader>r"
 
 "let g:user_emmet_leader_key='<C-Z>'
 let g:user_emmet_expandabbr_key = '<C-e>'  
-"gn go to next file  
-"gb go back to the old file
-nnoremap gn :bNext!<CR>
-nnoremap gb :bprev!<CR>
 
 
-"ememeber gBlink in dota
-"
 
 ""ide  模式 打开使用winmannger管理nerdtree 和 taglist
 let Tlist_Show_One_File=1  
 let Tlist_Exit_OnlyWindow=1
-"let  g:winManagerWindowLayout = "FileExplorer|TagList,BufExplorer"
-"let g:winManagerWindowLayout = "NERDTree|TagList,BufExplorer"
 let NERDTreeWinSize=15
 let g:ide_mode_is_open=0
 function OpenIDEmode()
@@ -278,8 +287,6 @@ autocmd VimLeave  * :call ExitIDEmode()
 map gz  <leader>cm
 map gx  <leader>c<space>
 "leader co color open
-"粘贴模式
-set pastetoggle=<F5>
 
 let g:DoxygenToolkit_briefTag_pre="@synopsis  "
 let g:DoxygenToolkit_paramTag_pre="@param "
@@ -306,15 +313,18 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 "let g:syntastic_sql_checkers=[]
 
 "unite instead of ctrl-p
-let g:unite_source_rec_async_command =
-                \ ['ag', '--follow', '--nocolor', '--nogroup',
-		\  '--hidden', '-g', '']
-call unite#custom#profile('default', 'context', {
-	\   'start_insert': 1,
-	\   'winheight': 10,
-	\   'direction': 'botright',
-	\ })
-"change ctrl-p to alt-p change ctrl-p plugin to alt-p
+"ack setting
+if executable('ag')
+  let g:ackprg = 'ag --nogroup --nocolor --column'
+endif
+
+""neomakemp setting
+"autodetect the existence of commands and select the faster one(rg > ag > grep)
+let g:neomakemp_grep_command = "ag"
+"following is default value
+let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
+let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
+
 if has("mac")
 "only for mac
 	map <Command-c> :w !pbcopy<CR><CR>
@@ -323,8 +333,14 @@ if has("mac")
 "diffent between mac and windows
 "	unite.vim
 "	<M-o> 搜索关键字找文件 <M-p> 按照文件名找文件
-	nnoremap π :<C-u>Unite -start-insert file_rec/async:!<CR>
-	nnoremap ø :<C-u>Unite grep <CR><CR>
+	"nnoremap π :<C-u>Unite -start-insert file_rec/async:!<CR>
+	"nnoremap ø :<C-u>Unite grep <CR><CR>
+	"思路 leaderf + neomakemp 做文件名字和内容的检索
+	"
+	nmap ø 	<Plug>(neomakemp_global_search2)
+	vmap ø  <Plug>(neomakemp_global_search)
+	nnoremap π :LeaderfFile <CR>
+	nnoremap ƒ :LeaderfFunctionAll <CR>
 	inoremap ˙ <Left>
 	inoremap ∆ <Down>
 	inoremap ˚ <Up>
@@ -335,6 +351,7 @@ if has("mac")
 else
 	"let g:ctrlp_map = '<M-p>'
 	"nnoremap <M-p> :Unite -start-insert file<CR>
+	"windows 和mac alt按键不一样 需要处理
 	nnoremap <M-o> :<C-u>Unite grep <CR><CR>
 	nnoremap <M-p> :<C-u>Unite -start-insert file_rec/async:!<CR>
 endif
@@ -367,18 +384,7 @@ endif
 "vim-easymotion 快速查找快捷操作
 nmap  <Space><Space>w  <leader><leader>w
 
-"
 
-
-"let g:rainbow_active = 1
-
-function FormatCode()
-		execute  "normal ggVG="
-endfunction 
-"map <F5> :call FormatCode() <CR>
-
-"gm{a-z}  标记为书签{a-z}  而m 为书签插件的书签 gma 记录书签标记为a  ma 是列出书签
-nnoremap gm m
 "for ConqueTerm 关闭时关闭buffer 否则关闭shell 会变成普通缓冲区 
 let g:ConqueTerm_CloseOnEnd = 1 
 "let g:vimshell-options-toggle=1
@@ -386,18 +392,6 @@ function! Toggle_shell()
 		let tmp=&splitbelow
 		set splitbelow
 		execute  "VimShell -toggle -split-command=split -buffer-name=VimShell___buffer"
-		"let bufferid=bufnr("[vimshell] - VimShell___buffer")
-		"if !vimshell#get_status_string()
-			"echo "ok"
-			"echo bufloaded(bufferid)
-			"echo "111"
-			"if bufloaded(bufferid)==0 
-				"execute "bdelete! ".bufferid
-				""echo "bdelete! ".bufferid
-				"echo "111"
-			"endif
-		"endif
-		"set splitbelow=tmp
 		if tmp==0
 		set nosplitbelow
 		endif
@@ -431,134 +425,12 @@ function Yujiaao_complete()
 						return  "\<C-x>\<C-n>"
 				endif
 				"default
-				return "\<C-x>\<C-u>\<C-p>"
+				"return "\<C-x>\<C-u>\<C-p>"
+				return  "\<C-x>\<C-n>"
 endfunction
 let g:completor_auto_trigger = 0
 inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : Yujiaao_complete()
 
-"if has('lua') 
-"		"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-"		" Disable AutoComplPop.
-"		let g:acp_enableAtStartup = 0
-"		" Use neocomplete.
-"		let g:neocomplete#enable_at_startup = 1
-"		" Use smartcase.
-"		let g:neocomplete#enable_smart_case = 1
-"		" Set minimum syntax keyword length.
-"		let g:neocomplete#sources#syntax#min_keyword_length = 3
-"
-"		" Define dictionary.
-"		let g:neocomplete#sources#dictionary#dictionaries = {
-"								\ 'default' : '',
-"								\ 'vimshell' : $HOME.'/.vimshell_hist',
-"								\ 'scheme' : $HOME.'/.gosh_completions'
-"								\ }
-"
-"		" Define keyword.
-"		if !exists('g:neocomplete#keyword_patterns')
-"				let g:neocomplete#keyword_patterns = {}
-"		endif
-"		let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-"
-"		" Plugin key-mappings.
-"		inoremap <expr><C-g>     neocomplete#undo_completion()
-"		inoremap <expr><C-l>     neocomplete#complete_common_string()
-"
-"		" Recommended key-mappings.
-"		" <CR>: close popup and save indent.
-"		inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-"		function! s:my_cr_function()
-"				return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-"				" For no inserting <CR> key.
-"				"return pumvisible() ? "\<C-y>" : "\<CR>"
-"		endfunction
-"		" <TAB>: completion.
-"		inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-"		" <C-h>, <BS>: close popup and delete backword char.
-"		inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-"		inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-"		" Close popup by <Space>.
-"		"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-"
-"		" AutoComplPop like behavior.
-"		"let g:neocomplete#enable_auto_select = 1
-"
-"		" Shell like behavior(not recommended).
-"		"set completeopt+=longest
-"		"let g:neocomplete#enable_auto_select = 1
-"		"不使用自动提示 使用C-n 进行手动提示 和不含自动补全的vim一致
-"		let g:neocomplete#disable_auto_complete = 1 
-"		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>" :neocomplete#start_manual_complete() 		
-"		"yujiaao  
-"		"<C-x><C-u> 可以显示更多信息 但是不一定每个插件都支持
-"		"需要区别对待各种语言 
-"		"<C-x><C-u> completefunc 补全
-"		"<C-x><C-o> omni 补全
-"		function Neocomplete_complete()
-"				" &omnifunc
-"				"if (&completefunc !='')
-"				if (&omnifunc !='')
-"						if (&filetype=="python")
-"							return "\<C-x>\<C-o>"
-"						else
-"							return "\<C-x>\<C-u>"
-"						endif
-"				else
-"						return "\<C-x>\<C-n>"
-"				endif
-"		endfunction
-"		"completefunc
-"		"自动补全
-"		"inoremap <expr><C-n>  pumvisible() ? "\<C-n>": Neocomplete_complete()	
-"		"inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
-"		"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-"		inoremap <expr><C-n>   pumvisible() ? "\<C-n>":Neocomplete_complete()
-"
-"		" Enable omni completion.
-"		autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-"		autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-"		autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"		"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-"		autocmd FileType python setlocal omnifunc=jedi#completions
-"		autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"		autocmd FileType lua setlocal omnifunc=xolox#lua#omnifunc  
-"
-"		" Enable heavy omni completion.
-"		if !exists('g:neocomplete#sources#omni#input_patterns')
-"				let g:neocomplete#sources#omni#input_patterns = {}
-"		endif
-"		"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"		"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"		"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-"
-"		" For perlomni.vim setting.
-"		" https://github.com/c9s/perlomni.vim
-"		let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-"endif
-"end neocomplete
-
-"cmake ide begin
-"let g:cmake_ide_open=0
-"function  CMakeIDEToggle()
-		"if g:cmake_ide_open==0
-			"let s:dir=getcwd().'/vimcmake'
-			"if !isdirectory(s:dir)
-				"call mkdir(s:dir)
-				"CMakeGen vimcmake
-			"else
-			"end
-			"CMakeBar
-			"let g:cmake_ide_open=1
-		"else
-			""is_open close
-			"CMakeBar	
-			"let g:cmake_ide_open=0
-		"end
-"endfunction
-""cmake ide end
-
-"
-"#
 "yujiaao lua-support 插件的默认浏览器
 let g:Templates_InternetBrowserExec = 'open'
 let g:Templates_InternetBrowserFlags='-a Google\ Chrome.app'

@@ -91,11 +91,12 @@ Plug 'majutsushi/tagbar'
 Plug 'DoxygenToolkit.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'kien/ctrlp.vim'
+"ctrl-p 已经不维护了 unite.vim 代替
+"Plug 'kien/ctrlp.vim'
 Plug 'kshenoy/vim-ctrlp-args'
-"Plug 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 "ale 支持vim8.0 的异步 比 syntastic 快很多
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
 Plug 'project.tar.gz'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'a.vim'
@@ -110,14 +111,17 @@ Plug 'rosenfeld/conque-term'
 "vim 8.0异步执行特性
 Plug 'skywind3000/asyncrun.vim'
 "文件搜索 Shougo/denite.nvim 还没开发完成 
+"Yggdroot/LeaderF 待测试
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Shougo/vimshell.vim'
 "Plug 'Shougo/neocomplete.vim'
 Plug 'maralla/completor.vim'
+"Plug 'prabirshrestha/asyncomplete.vim' 还有一个类似的 没有测试过 先标记在这里
 "for lua
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-lua-ftplugin'
+Plug 'yujiaao100/lua-support'
 Plug 'luarefvim'
 Plug 'DfrankUtil'
 Plug 'vimprj'
@@ -126,8 +130,8 @@ Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'godlygeek/tabular'
 "Plug 'Ignotus/vim-cmake-project'
-"Plug 'airblade/vim-gitgutter'
-Plug 'yujiaao100/vim-cmake-project'
+Plug 'airblade/vim-gitgutter'
+"Plug 'yujiaao100/vim-cmake-project'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 "nerd 字体库  太大了 就不安装了
@@ -136,12 +140,14 @@ Plug 'leafgarland/typescript-vim'
 Plug 'othree/csscomplete.vim'
 Plug 'python-mode/python-mode'
 "Plug 'davidhalter/jedi-vim'
-"Plug 'zoeesilcock/vim-caniuse'
+Plug 'zoeesilcock/vim-caniuse'
 "I can use 一个css兼容性测试扩展
-"Plug 'Quramy/tsuquyomi'
+"for ts
+Plug 'Quramy/tsuquyomi'
 "Plug 'sigidagi/vim-cmake-project'
-"Plug 'scrooloose/nerdtree'
-"Plug 'benmills/vimux'
+Plug 'benmills/vimux'
+"https://github.com/luzhlon/popup.vim
+"弹出插件（带测试）
 "Plug 'MattesGroeger/vim-bookmarks'
 "Plug 'hjdivad/vimlocalhistory'
 
@@ -161,6 +167,7 @@ if iCanHazVundle == 0
   PlugInstall
 endif
 
+""test
 "map 
 
 if has("gui_running")
@@ -241,6 +248,7 @@ let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
 "let  g:winManagerWindowLayout = "FileExplorer|TagList,BufExplorer"
 "let g:winManagerWindowLayout = "NERDTree|TagList,BufExplorer"
+let NERDTreeWinSize=15
 let g:ide_mode_is_open=0
 function OpenIDEmode()
 		if 	g:ide_mode_is_open==0
@@ -248,12 +256,10 @@ function OpenIDEmode()
 				"execute "WMToggle"
 				execute "NERDTreeToggle"
 				execute "TagbarToggle"
-				echo "1"
 		else
 				let g:ide_mode_is_open=0
 				execute "NERDTreeToggle"
 				execute "TagbarToggle"
-				echo "0"
 endif
 "两个nerd的辅助函数
 "TlistToggle
@@ -280,7 +286,7 @@ let g:DoxygenToolkit_paramTag_pre="@param "
 let g:DoxygenToolkit_returnTag="@returns   "
 let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_blockFooter="----------------------------------------------------------------------------"
-let g:DoxygenToolkit_authorName="Mathias Lorente"
+let g:DoxygenToolkit_authorName="yujiaao"
 let g:DoxygenToolkit_licenseTag="My own license"
 
 
@@ -290,15 +296,24 @@ set laststatus=2
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 "scrooloose/syntastic" settings
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_sql_checkers=[]
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_sql_checkers=[]
 
+"unite instead of ctrl-p
+let g:unite_source_rec_async_command =
+                \ ['ag', '--follow', '--nocolor', '--nogroup',
+		\  '--hidden', '-g', '']
+call unite#custom#profile('default', 'context', {
+	\   'start_insert': 1,
+	\   'winheight': 10,
+	\   'direction': 'botright',
+	\ })
 "change ctrl-p to alt-p change ctrl-p plugin to alt-p
 if has("mac")
 "only for mac
@@ -306,7 +321,10 @@ if has("mac")
 	map <Command-v> :r !pbpaste<CR><CR>
 	set backspace=indent,eol,start
 "diffent between mac and windows
-	let g:ctrlp_map='π'
+"	unite.vim
+"	<M-o> 搜索关键字找文件 <M-p> 按照文件名找文件
+	nnoremap π :<C-u>Unite -start-insert file_rec/async:!<CR>
+	nnoremap ø :<C-u>Unite grep <CR><CR>
 	inoremap ˙ <Left>
 	inoremap ∆ <Down>
 	inoremap ˚ <Up>
@@ -315,7 +333,10 @@ if has("mac")
 	"windows 下需要配置 KabbAmine/zeavim.vim 使用zeal
 	nmap <C-k> <Plug>DashSearch
 else
-	let g:ctrlp_map = '<M-p>'
+	"let g:ctrlp_map = '<M-p>'
+	"nnoremap <M-p> :Unite -start-insert file<CR>
+	nnoremap <M-o> :<C-u>Unite grep <CR><CR>
+	nnoremap <M-p> :<C-u>Unite -start-insert file_rec/async:!<CR>
 endif
 "https://zhuanlan.zhihu.com/p/23578381
 "解决输入模式下输入中文后切换成normal模式下还是中文导致normal模式下经常出错的问题
@@ -385,9 +406,12 @@ noremap <F8> :call Toggle_shell() <CR>
 let g:lua_complete_omni = 1
 let g:lua_complete_dynamic=0
 let g:lua_compiler_name = '/usr/local/bin/luac'
+let g:Lua_InsertFileHeader='no'
+let g:lua_path='/Users/stone/.luarocks/share/lua/5.2/?.lua;/Users/stone/.luarocks/share/lua/5.2/?/init.lua;/usr/local/share/lua/5.2/?.lua;/usr/local/share/lua/5.2/?/init.lua;/usr/local/Cellar/lua/5.2.4_3/libexec/share/lua/5.2/?.lua;/usr/local/lib/lua/5.2/?.lua;/usr/local/lib/lua/5.2/?/init.lua;./?.lua'
+let g:lua_internal = 0
 
-"let g:completor_auto_trigger=0
-"let g:completor_set_options=0
+let g:completor_auto_trigger=0
+let g:completor_set_options=0
 
 function Yujiaao_complete()
 				"补全函数的特殊处理
@@ -403,8 +427,9 @@ function Yujiaao_complete()
 				"		return "\<C-x>\<C-n>"
 				"endif"\<C-x>\<C-u>\<C-p>"
 				""\<C-x>\<C-u>\<C-p>"
-				"if (&filetype=="lua")
-				"		return  "\<C-x>\<C-o>"
+				if (&filetype=="lua")
+						return  "\<C-x>\<C-n>"
+				endif
 				"default
 				return "\<C-x>\<C-u>\<C-p>"
 endfunction
@@ -532,3 +557,8 @@ inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : Yujiaao_complete()
 "endfunction
 ""cmake ide end
 
+"
+"#
+"yujiaao lua-support 插件的默认浏览器
+let g:Templates_InternetBrowserExec = 'open'
+let g:Templates_InternetBrowserFlags='-a Google\ Chrome.app'

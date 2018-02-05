@@ -132,6 +132,8 @@ Plug 'skywind3000/asyncrun.vim'
 "文件搜索 Shougo/denite.nvim 还没开发完成 
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'Shougo/unite.vim'
+"test
+Plug 'Shougo/denite.nvim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Shougo/vimshell.vim'
 "Plug 'Shougo/neocomplete.vim'
@@ -192,6 +194,7 @@ if has("gui_running")
 	set mouse=a
 	"vcoolor runs when gui
 	if has("mac")
+	
 	"mac 保存桌面 ：WW
 		command WW browse confirm w ~/Desktop 
 		"open -a MacVim.app 11.txt
@@ -330,13 +333,18 @@ if has("mac")
 	map <Command-c> :w !pbcopy<CR><CR>
 	map <Command-v> :r !pbpaste<CR><CR>
 	set backspace=indent,eol,start
+	set pythonthreehome=$HOME/.pyenv/versions/3.6.0
+	set pythonthreedll=$HOME/.pyenv/versions/3.6.0/lib/libpython3.6m.dylib
 "diffent between mac and windows
 "	unite.vim
 "	<M-o> 搜索关键字找文件 <M-p> 按照文件名找文件
 	"nnoremap π :<C-u>Unite -start-insert file_rec/async:!<CR>
 	"nnoremap ø :<C-u>Unite grep <CR><CR>
 	"思路 leaderf + neomakemp 做文件名字和内容的检索
-	"
+	"ƒ Alt-f
+	"ø Alt-o
+	"π Alt-p
+	"˙∆˚¬ Alt-hjkl 插入模式下 alt +hjkl 表示上下左右这样用着挺舒服的
 	nmap ø 	<Plug>(neomakemp_global_search2)
 	vmap ø  <Plug>(neomakemp_global_search)
 	nnoremap π :LeaderfFile <CR>
@@ -349,11 +357,12 @@ if has("mac")
 	"windows 下需要配置 KabbAmine/zeavim.vim 使用zeal
 	nmap <C-k> <Plug>DashSearch
 else
+	"windows 下没测试过Alt绑定  用windows的时候再说
 	"let g:ctrlp_map = '<M-p>'
 	"nnoremap <M-p> :Unite -start-insert file<CR>
 	"windows 和mac alt按键不一样 需要处理
-	nnoremap <M-o> :<C-u>Unite grep <CR><CR>
-	nnoremap <M-p> :<C-u>Unite -start-insert file_rec/async:!<CR>
+	"nnoremap <M-o> :<C-u>Unite grep <CR><CR>
+	"nnoremap <M-p> :<C-u>Unite -start-insert file_rec/async:!<CR>
 endif
 "https://zhuanlan.zhihu.com/p/23578381
 "解决输入模式下输入中文后切换成normal模式下还是中文导致normal模式下经常出错的问题
@@ -397,6 +406,7 @@ function! Toggle_shell()
 		endif
 endfunction
 noremap <F8> :call Toggle_shell() <CR>
+":terminal
 let g:lua_complete_omni = 1
 let g:lua_complete_dynamic=0
 let g:lua_compiler_name = '/usr/local/bin/luac'

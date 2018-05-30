@@ -1,4 +1,15 @@
-" bacic 
+
+"windows
+set runtimepath+=~/.vim
+source $VIMRUNTIME/delmenu.vim  
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+behave mswin
+source $VIMRUNTIME/delmenu.vim  
+
+
+"set runpath
+" bacicnnn
 set ts=4
 syntax on
 
@@ -102,12 +113,12 @@ Plug 'neomake/neomake'
 Plug 'tracyone/neomake-multiprocess'
 "sublime配色
 Plug 'sickill/vim-monokai'
-Plug 'taglist.vim'
+Plug 'vim-scripts/taglist.vim'
 "Plug 'winmanager'
 "Plug 'simplyzhao/cscope_maps.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'majutsushi/tagbar'
-Plug 'DoxygenToolkit.vim'
+Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "ctrl-p 已经不维护了 unite.vim 代替
@@ -116,9 +127,9 @@ Plug 'kshenoy/vim-ctrlp-args'
 Plug 'scrooloose/syntastic'
 "ale 支持vim8.0 的异步 比 syntastic 快很多
 "Plug 'w0rp/ale'
-Plug 'project.tar.gz'
+Plug 'vim-scripts/project.tar.gz'
 Plug 'Lokaltog/vim-easymotion'
-Plug 'a.vim'
+Plug 'vim-scripts/a.vim'
 Plug 'nelstrom/vim-qargs'
 "Plug 'luochen1990/rainbow'
 "这个rainbow插件在某些时候回导致vim卡住 
@@ -130,7 +141,7 @@ Plug 'rosenfeld/conque-term'
 "vim 8.0异步执行特性
 Plug 'skywind3000/asyncrun.vim'
 "文件搜索 Shougo/denite.nvim 还没开发完成 
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'Yggdroot/LeaderF', { 'do': './install.bat' }
 Plug 'Shougo/unite.vim'
 "test
 Plug 'Shougo/denite.nvim'
@@ -143,9 +154,9 @@ Plug 'maralla/completor.vim'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-lua-ftplugin'
 Plug 'yujiaao100/lua-support'
-Plug 'luarefvim'
-Plug 'DfrankUtil'
-Plug 'vimprj'
+Plug 'vim-scripts/luarefvim'
+Plug 'vim-scripts/DfrankUtil'
+Plug 'vim-scripts/vimprj'
 "Dash 插件
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-emoji'
@@ -217,8 +228,9 @@ if has("gui_running")
 	catch
 	endtry
 	try
-			set guifont=Source\ Code\ Pro:h21
-			"set guifont=Source\ Code\ Pro \h21 for windows
+			"set guifont=Source\ Code\  Pro:h21
+			set guifont=Source\ Code\ Variable:h21
+			"for windows
 			"windows和mac字体格式不一样没测试过
 	catch
 	endtry

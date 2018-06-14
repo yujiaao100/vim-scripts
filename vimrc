@@ -10,6 +10,7 @@ set nocompatible
 nmap <C-v> <C-q>
 nunmap <C-a>
 set selectmode="mouse,key,cmd"
+set keymodel=""
 
 "set runpath
 " bacic

@@ -6,10 +6,13 @@ source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
 source $VIMRUNTIME/delmenu.vim  
-
+set nocompatible
+nmap <C-v> <C-q>
+nunmap <C-a>
+set selectmode="mouse,key,cmd"
 
 "set runpath
-" bacicnnn
+" bacic
 set ts=4
 syntax on
 

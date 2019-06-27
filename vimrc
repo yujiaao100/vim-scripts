@@ -206,6 +206,7 @@ endif
 
 if has("gui_running")
 	"do nothing
+	set guioptions+=a
 	set mouse=a
 	"vcoolor runs when gui
 	if has("mac")

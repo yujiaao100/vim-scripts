@@ -32,3 +32,9 @@ There are ten types of registers:                       registers E354
 10. Last search pattern register "/  
 
 :browse 可以打开一个确认窗口
+
+
+
+
+
+digraphs 某些特殊符号编码
